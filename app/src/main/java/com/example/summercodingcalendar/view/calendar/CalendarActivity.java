@@ -17,43 +17,34 @@ import com.example.summercodingcalendar.view.calendar.weekly.WeeklyFragment;
 
 public class CalendarActivity extends AppCompatActivity implements CalendarContract.View, MonthlyFragment.OnFragmentInteractionListener, WeeklyFragment.OnFragmentInteractionListener, DailyFragment.OnFragmentInteractionListener {
     private CalendarPresenter mCalendarPresenter;
+    private ActivityCalendarBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ActivityCalendarBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_calendar);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_calendar);
         mCalendarPresenter = new CalendarPresenter(this);
-        binding.setFragmentManger(getSupportFragmentManager());
-        TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(binding.getFragmentManger());
-        tabPagerAdapter.setTabCount(3);
-
-        binding.setTabPagerAdapter(tabPagerAdapter);
-
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                 switch (menuItem.getItemId()) {
-                    case R.id.menu_montly:
-                        binding.viewPager.setCurrentItem(0);
-
-                        break;
-                    case R.id.menu_weekly:
-                        binding.viewPager.setCurrentItem(1);
-                        break;
-                    case R.id.menu_daily:
-                        binding.viewPager.setCurrentItem(2);
-                        break;
-                    }
-                    return true;
-            }
-        });
-        binding.viewPager.setAdapter(binding.getTabPagerAdapter());
+        setView();
 
 
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void setView() {
+
+        setSupportActionBar(mBinding.toolbar);
+        mBinding.setFragmentManger(getSupportFragmentManager());
+        TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(mBinding.getFragmentManger());
+        tabPagerAdapter.setTabCount(3);
+
+        mBinding.setTabPagerAdapter(tabPagerAdapter);
+        mBinding.viewPager.setAdapter(mBinding.getTabPagerAdapter());
+        mBinding.tabLayout.setupWithViewPager(mBinding.viewPager);
 
     }
 }
