@@ -31,11 +31,12 @@ import java.util.Locale;
  * Use the {@link MonthlyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MonthlyFragment extends Fragment {
+public class MonthlyFragment extends Fragment implements MonthlyContract.View{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private OnFragmentInteractionListener mListener;
-
+    private MonthlyPresenter mPresenter;
+    private FragmentMonthlyBinding mBinding;
     public MonthlyFragment() {
         // Required empty public constructor
     }
@@ -59,25 +60,17 @@ public class MonthlyFragment extends Fragment {
         if (getArguments() != null) {
 
         }
+        mPresenter = new MonthlyPresenter(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentMonthlyBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_monthly, container, false);
-        binding.materialCalendarView.setTitleFormatter(new TitleFormatter() {
-            @Override
-            public CharSequence format(CalendarDay calendarDay) {
-                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy년  LLL", new Locale("ko"));
-                return calendarDay.getDate().format(dateFormat);
-            }
-        });
-        binding.materialCalendarView.setDateSelected(binding.materialCalendarView.getCurrentDate(),true);
-        ArrayList<CalendarDay> days = new ArrayList<>();
-        days.add(binding.materialCalendarView.getCurrentDate());
-        binding.materialCalendarView.addDecorator(new EventDecorator(getResources().getColor(R.color.colorPrimaryDark), days));
-        return binding.getRoot();
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_monthly, container, false);
+        setView();
+
+        return mBinding.getRoot();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -102,6 +95,21 @@ public class MonthlyFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void setView() {
+        mBinding.materialCalendarView.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay calendarDay) {
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy년  LLL", new Locale("ko"));
+                return calendarDay.getDate().format(dateFormat);
+            }
+        });
+        mBinding.materialCalendarView.setDateSelected(mBinding.materialCalendarView.getCurrentDate(),true);
+        ArrayList<CalendarDay> days = new ArrayList<>();
+        days.add(mBinding.materialCalendarView.getCurrentDate());
+        mBinding.materialCalendarView.addDecorator(new EventDecorator(getResources().getColor(R.color.colorPrimaryDark), days));
     }
 
     /**

@@ -18,9 +18,9 @@ import com.example.summercodingcalendar.R;
  * Use the {@link WeeklyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WeeklyFragment extends Fragment {
+public class WeeklyFragment extends Fragment implements WeeklyContract.View{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
+    private WeeklyPresenter mPresenter;
     private OnFragmentInteractionListener mListener;
 
     public WeeklyFragment() {
@@ -46,6 +46,7 @@ public class WeeklyFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        mPresenter = new WeeklyPresenter(this);
     }
 
     @Override
