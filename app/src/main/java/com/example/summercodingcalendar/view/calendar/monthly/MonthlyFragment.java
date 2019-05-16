@@ -1,6 +1,8 @@
 package com.example.summercodingcalendar.view.calendar.monthly;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.summercodingcalendar.R;
+import com.example.summercodingcalendar.databinding.FragmentMonthlyBinding;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
+
+import org.threeten.bp.format.DateTimeFormatter;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,7 +65,19 @@ public class MonthlyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_monthly, container, false);
+        FragmentMonthlyBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_monthly, container, false);
+        binding.materialCalendarView.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay calendarDay) {
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy년  LLL", new Locale("ko"));
+                return calendarDay.getDate().format(dateFormat);
+            }
+        });
+        binding.materialCalendarView.setDateSelected(binding.materialCalendarView.getCurrentDate(),true);
+        ArrayList<CalendarDay> days = new ArrayList<>();
+        days.add(binding.materialCalendarView.getCurrentDate());
+        binding.materialCalendarView.addDecorator(new EventDecorator(getResources().getColor(R.color.colorPrimaryDark), days));
+        return binding.getRoot();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
