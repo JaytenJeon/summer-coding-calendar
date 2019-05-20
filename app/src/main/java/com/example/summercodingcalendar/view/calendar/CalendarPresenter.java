@@ -6,4 +6,9 @@ public class CalendarPresenter implements CalendarContract.Presenter {
     public CalendarPresenter(CalendarContract.View view) {
         this.view = view;
     }
+
+    @Override
+    public void onFabClicked() {
+        view.navigateToRegisterActivity();
+    }
 }
