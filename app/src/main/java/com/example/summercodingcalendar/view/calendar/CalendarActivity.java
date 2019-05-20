@@ -3,7 +3,7 @@ package com.example.summercodingcalendar.view.calendar;
 import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
 import android.net.Uri;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,14 +17,12 @@ import com.example.summercodingcalendar.view.calendar.weekly.WeeklyFragment;
 import com.example.summercodingcalendar.view.register.RegisterActivity;
 
 public class CalendarActivity extends AppCompatActivity implements CalendarContract.View, MonthlyFragment.OnFragmentInteractionListener, WeeklyFragment.OnFragmentInteractionListener, DailyFragment.OnFragmentInteractionListener {
-    private CalendarPresenter mCalendarPresenter;
     private ActivityCalendarBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_calendar);
-        mCalendarPresenter = new CalendarPresenter(this);
         setView();
 
 
@@ -46,12 +44,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
         mBinding.setTabPagerAdapter(tabPagerAdapter);
         mBinding.viewPager.setAdapter(mBinding.getTabPagerAdapter());
         mBinding.tabLayout.setupWithViewPager(mBinding.viewPager);
-        mBinding.fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCalendarPresenter.onFabClicked();
-            }
-        });
+        mBinding.setPresenter(new CalendarPresenter(this));
     }
 
     @Override

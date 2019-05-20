@@ -11,6 +11,9 @@
         <variable
             name="fragmentManger"
             type="androidx.fragment.app.FragmentManager"/>
+        <variable
+            name="presenter"
+            type="com.example.summercodingcalendar.view.calendar.CalendarPresenter"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -49,9 +52,10 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_add_24px"
             android:tint="@android:color/white"
+            android:onClick="@{()->presenter.onFabClicked()}"
+            android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:clickable="true"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
