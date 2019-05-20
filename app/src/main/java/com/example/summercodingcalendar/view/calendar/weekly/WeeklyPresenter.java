@@ -1,9 +1,9 @@
 package com.example.summercodingcalendar.view.calendar.weekly;
 
 public class WeeklyPresenter implements WeeklyContract.Presenter {
-    private WeeklyContract.View mView;
+    private WeeklyContract.View view;
 
     public WeeklyPresenter(WeeklyContract.View view) {
-        mView = view;
+        this.view = view;
     }
 }
