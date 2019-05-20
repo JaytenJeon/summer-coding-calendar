@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SummerCodingCalendar</string>
+
+
+    <string name="title_daily">일간</string>
+    <string name="title_weekly">주간</string>
+    <string name="title_monthly">월간</string>
+    <string name="hint_date">날짜</string>
 </resources>
