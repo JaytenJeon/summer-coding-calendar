@@ -1,11 +1,11 @@
 package com.example.summercodingcalendar.view.calendar.monthly;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +13,12 @@ import android.view.ViewGroup;
 import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.FragmentMonthlyBinding;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -108,8 +104,8 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
                 return calendarDay.getDate().format(dateFormat);
             }
         });
-        mBinding.materialCalendarView.setCurrentDate(LocalDate.now());
-        mBinding.materialCalendarView.setDateSelected(mBinding.materialCalendarView.getCurrentDate(),true);
+        LocalDate date = LocalDate.now();
+        mBinding.materialCalendarView.setDateSelected(CalendarDay.from(date), true);
         ArrayList<CalendarDay> days = new ArrayList<>();
         days.add(mBinding.materialCalendarView.getCurrentDate());
         mBinding.materialCalendarView.addDecorator(new EventDecorator(Color.RED, days));
