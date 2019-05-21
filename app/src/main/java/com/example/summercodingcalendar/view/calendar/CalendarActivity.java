@@ -6,11 +6,10 @@ import android.net.Uri;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.ActivityCalendarBinding;
-import com.example.summercodingcalendar.view.calendar.adapter.TabPagerAdapter;
+import com.example.summercodingcalendar.view.calendar.adapter.CalendarTabPagerAdapter;
 import com.example.summercodingcalendar.view.calendar.daily.DailyFragment;
 import com.example.summercodingcalendar.view.calendar.monthly.MonthlyFragment;
 import com.example.summercodingcalendar.view.calendar.weekly.WeeklyFragment;
@@ -38,13 +37,13 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
 
         setSupportActionBar(mBinding.toolbar);
         mBinding.setFragmentManger(getSupportFragmentManager());
-        TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(mBinding.getFragmentManger());
-        tabPagerAdapter.setTabCount(3);
-
-        mBinding.setTabPagerAdapter(tabPagerAdapter);
-        mBinding.viewPager.setAdapter(mBinding.getTabPagerAdapter());
+        mBinding.setCalendarTabPagerAdapter(new CalendarTabPagerAdapter(mBinding.getFragmentManger()));
+        mBinding.viewPager.setAdapter(mBinding.getCalendarTabPagerAdapter());
         mBinding.tabLayout.setupWithViewPager(mBinding.viewPager);
         mBinding.setPresenter(new CalendarPresenter(this));
+        mBinding.getPresenter().setTabPagerAdapterView(mBinding.getCalendarTabPagerAdapter());
+        mBinding.getPresenter().setTabPagerAdapterModel(mBinding.getCalendarTabPagerAdapter());
+        mBinding.getPresenter().setFragments();
     }
 
     @Override
