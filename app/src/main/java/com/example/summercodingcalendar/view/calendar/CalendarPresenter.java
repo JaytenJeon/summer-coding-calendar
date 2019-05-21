@@ -26,9 +26,9 @@ public class CalendarPresenter implements CalendarContract.Presenter {
 
     @Override
     public void setFragments() {
-        adapterModel.addFragment(MonthlyFragment.newInstance());
-        adapterModel.addFragment(WeeklyFragment.newInstance());
-        adapterModel.addFragment(DailyFragment.newInstance());
+        adapterModel.addFragment(MonthlyFragment.newInstance("Monthly"));
+        adapterModel.addFragment(WeeklyFragment.newInstance("Weekly"));
+        adapterModel.addFragment(DailyFragment.newInstance("Daily"));
         adapterView.notifyAdapter();
     }
 

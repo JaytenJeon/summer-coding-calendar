@@ -22,6 +22,7 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.View{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private WeeklyPresenter mPresenter;
     private OnFragmentInteractionListener mListener;
+    private String title;
 
     public WeeklyFragment() {
         // Required empty public constructor
@@ -34,9 +35,10 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.View{
      * @return A new instance of fragment WeeklyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WeeklyFragment newInstance() {
+    public static WeeklyFragment newInstance(String title) {
         WeeklyFragment fragment = new WeeklyFragment();
         Bundle args = new Bundle();
+        args.putString("title", title);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,6 +47,7 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.View{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            this.title = getArguments().getString("title");
         }
         mPresenter = new WeeklyPresenter(this);
     }

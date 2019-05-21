@@ -35,6 +35,8 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
     private OnFragmentInteractionListener mListener;
     private MonthlyPresenter mPresenter;
     private FragmentMonthlyBinding mBinding;
+    private String title;
+
     public MonthlyFragment() {
         // Required empty public constructor
     }
@@ -45,9 +47,10 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
      *
      * @return A new instance of fragment MonthlyFragment.
      */
-    public static MonthlyFragment newInstance() {
+    public static MonthlyFragment newInstance(String title) {
         MonthlyFragment fragment = new MonthlyFragment();
         Bundle args = new Bundle();
+        args.putString("title", title);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +59,7 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            this.title = getArguments().getString("title");
         }
         mPresenter = new MonthlyPresenter(this);
     }
