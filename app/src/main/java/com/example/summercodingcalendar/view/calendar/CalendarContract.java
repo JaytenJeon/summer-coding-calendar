@@ -2,6 +2,8 @@ package com.example.summercodingcalendar.view.calendar;
 
 import com.example.summercodingcalendar.view.calendar.adapter.TabPagerAdapterContract;
 
+import java.util.Date;
+
 public interface CalendarContract {
     interface View{
         void setView();
@@ -11,7 +13,7 @@ public interface CalendarContract {
     interface Presenter{
         void setTabPagerAdapterView(TabPagerAdapterContract.View adapterView);
         void setTabPagerAdapterModel(TabPagerAdapterContract.Model adapterModel);
-        void setFragments();
+        void setFragments(Date date);
         void onFabClicked();
     }
 

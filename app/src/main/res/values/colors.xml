@@ -11,5 +11,6 @@
 
 
     <color name="colorPrimaryText">#ffffff</color>
+    <color name="colorPrimaryTextBlack">#000000</color>
 
 </resources>

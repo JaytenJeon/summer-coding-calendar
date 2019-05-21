@@ -15,10 +15,13 @@ import com.example.summercodingcalendar.databinding.FragmentMonthlyBinding;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
+import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -36,7 +39,7 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
     private MonthlyPresenter mPresenter;
     private FragmentMonthlyBinding mBinding;
     private String title;
-
+    private long selectedDate;
     public MonthlyFragment() {
         // Required empty public constructor
     }
@@ -47,10 +50,12 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
      *
      * @return A new instance of fragment MonthlyFragment.
      */
-    public static MonthlyFragment newInstance(String title) {
+    public static MonthlyFragment newInstance(String title, Date date) {
         MonthlyFragment fragment = new MonthlyFragment();
         Bundle args = new Bundle();
+        long selectedDate = date.getTime();
         args.putString("title", title);
+        args.putLong("selectedDate", selectedDate);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,6 +65,7 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.title = getArguments().getString("title");
+            this.selectedDate = getArguments().getLong("selectedDate");
         }
         mPresenter = new MonthlyPresenter(this);
     }
@@ -107,8 +113,8 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
                 return calendarDay.getDate().format(dateFormat);
             }
         });
-        LocalDate date = LocalDate.now();
-        mBinding.materialCalendarView.setDateSelected(CalendarDay.from(date), true);
+
+        mBinding.materialCalendarView.setDateSelected(CalendarDay.from(Instant.ofEpochMilli(selectedDate).atZone(ZoneId.systemDefault()).toLocalDate()), true);
         ArrayList<CalendarDay> days = new ArrayList<>();
         days.add(mBinding.materialCalendarView.getCurrentDate());
         mBinding.materialCalendarView.addDecorator(new EventDecorator(Color.RED, days));

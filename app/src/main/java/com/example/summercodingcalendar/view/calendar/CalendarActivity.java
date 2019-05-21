@@ -15,16 +15,15 @@ import com.example.summercodingcalendar.view.calendar.monthly.MonthlyFragment;
 import com.example.summercodingcalendar.view.calendar.weekly.WeeklyFragment;
 import com.example.summercodingcalendar.view.register.RegisterActivity;
 
+import java.util.Calendar;
+
 public class CalendarActivity extends AppCompatActivity implements CalendarContract.View, MonthlyFragment.OnFragmentInteractionListener, WeeklyFragment.OnFragmentInteractionListener, DailyFragment.OnFragmentInteractionListener {
     private ActivityCalendarBinding mBinding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_calendar);
         setView();
-
-
     }
 
     @Override
@@ -36,6 +35,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
     public void setView() {
 
         setSupportActionBar(mBinding.toolbar);
+        mBinding.setSelectedDate(Calendar.getInstance().getTime());
         mBinding.setFragmentManger(getSupportFragmentManager());
         mBinding.setCalendarTabPagerAdapter(new CalendarTabPagerAdapter(mBinding.getFragmentManger()));
         mBinding.viewPager.setAdapter(mBinding.getCalendarTabPagerAdapter());
@@ -43,7 +43,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
         mBinding.setPresenter(new CalendarPresenter(this));
         mBinding.getPresenter().setTabPagerAdapterView(mBinding.getCalendarTabPagerAdapter());
         mBinding.getPresenter().setTabPagerAdapterModel(mBinding.getCalendarTabPagerAdapter());
-        mBinding.getPresenter().setFragments();
+        mBinding.getPresenter().setFragments(mBinding.getSelectedDate());
     }
 
     @Override

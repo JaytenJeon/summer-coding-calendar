@@ -4,12 +4,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <import type="com.example.summercodingcalendar.util.Converter"/>
+        <variable
+            name="presenter"
+            type="com.example.summercodingcalendar.view.register.RegisterPresenter"/>
+        <variable
+            name="date"
+            type="java.util.Date"/>
+        <variable
+            name="title"
+            type="String"/>
+        <variable
+            name="body"
+            type="String"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.register.RegisterActivity">
-
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:hint="@string/hint_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:clickable="true"
+                android:text="@={Converter.dateToString(date)}"
+                android:onClick="@{()->presenter.onEditTextDateClicked()}"
+                android:focusableInTouchMode="false"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:hint="@string/hint_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={title}"
+                android:afterTextChanged="@{()->presenter.afterTextChanged()}"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:hint="@string/hint_body"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_title"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:singleLine="true"
+                android:maxLines="5"
+                android:gravity="start"
+                android:text="@={body}"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/button_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:letterSpacing="0.5"
+            android:text="@string/button_register"
+            android:onClick="@{()->presenter.onRegisterButtonClicked(date, title, body)}"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
