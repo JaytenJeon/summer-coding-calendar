@@ -15,7 +15,8 @@ import com.example.summercodingcalendar.databinding.ActivityRegisterBinding;
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View{
-    ActivityRegisterBinding mBinding;
+    private ActivityRegisterBinding mBinding;
+    private Calendar mCalendar = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,17 +49,15 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
     @Override
     public void showDatePickerDialog() {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int year = mCalendar.get(Calendar.YEAR);
+        int month = mCalendar.get(Calendar.MONTH);
+        int day = mCalendar.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePickerDialog = new DatePickerDialog(RegisterActivity.this,R.style.AppTheme_Calendar,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Calendar.getInstance().set(year, month, dayOfMonth);
-                        mBinding.setDate(Calendar.getInstance().getTime());
-                        Log.d("AAAAA",mBinding.getDate().toString());
+                        mCalendar.set(year, month, dayOfMonth);
+                        mBinding.setDate(mCalendar.getTime());
                     }
                 },year, month, day);
         datePickerDialog.show();
