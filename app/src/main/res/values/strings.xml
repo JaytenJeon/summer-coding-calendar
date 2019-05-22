@@ -6,4 +6,9 @@
     <string name="title_weekly">주간</string>
     <string name="title_monthly">월간</string>
     <string name="hint_date">날짜</string>
+    <string name="hint_body">내용(선택)</string>
+    <string name="hint_title">제목</string>
+    <string name="button_register">등록</string>
+    <string name="error_date">날짜를 입력해주세요</string>
+    <string name="error_title">제목을 입력해주세요</string>
 </resources>

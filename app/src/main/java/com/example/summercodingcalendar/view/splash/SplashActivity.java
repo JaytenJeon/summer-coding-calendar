@@ -4,6 +4,8 @@ import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import io.realm.Realm;
+
 import android.os.Bundle;
 
 import com.example.summercodingcalendar.R;
@@ -16,6 +18,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySplashBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
+        Realm.init(this);
         mSplashPresenter = new SplashPresenter(this);
         mSplashPresenter.onStart();
     }

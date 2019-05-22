@@ -22,6 +22,7 @@ public class DailyFragment extends Fragment implements DailyContract.View {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private DailyPresenter mPresenter;
     private OnFragmentInteractionListener mListener;
+    private String title;
 
     public DailyFragment() {
         // Required empty public constructor
@@ -33,9 +34,10 @@ public class DailyFragment extends Fragment implements DailyContract.View {
      *
      * @return A new instance of fragment DailyFragment.
      */
-    public static DailyFragment newInstance() {
+    public static DailyFragment newInstance(String title) {
         DailyFragment fragment = new DailyFragment();
         Bundle args = new Bundle();
+        args.putString("title", title);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +46,7 @@ public class DailyFragment extends Fragment implements DailyContract.View {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            this.title = getArguments().getString("title");
         }
         mPresenter = new DailyPresenter(this);
     }

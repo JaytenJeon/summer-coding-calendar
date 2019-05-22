@@ -11,7 +11,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.register.RegisterActivity"
-            android:theme="@style/AppTheme.ActionBar"></activity>
+            android:theme="@style/AppTheme.ActionBar"
+            android:parentActivityName=".view.calendar.CalendarActivity" >
+            </activity>
         <activity
             android:name=".view.splash.SplashActivity"
             android:theme="@style/AppTheme.Splash">
