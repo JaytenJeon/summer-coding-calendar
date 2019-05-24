@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.ActivityCalendarBinding;
+import com.example.summercodingcalendar.util.Converter;
 import com.example.summercodingcalendar.view.calendar.adapter.CalendarTabPagerAdapter;
 import com.example.summercodingcalendar.view.calendar.daily.DailyFragment;
 import com.example.summercodingcalendar.view.calendar.monthly.MonthlyFragment;
@@ -16,6 +17,7 @@ import com.example.summercodingcalendar.view.calendar.weekly.WeeklyFragment;
 import com.example.summercodingcalendar.view.register.RegisterActivity;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity implements CalendarContract.View, MonthlyFragment.OnFragmentInteractionListener, WeeklyFragment.OnFragmentInteractionListener, DailyFragment.OnFragmentInteractionListener {
     private ActivityCalendarBinding mBinding;
@@ -33,9 +35,9 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
 
     @Override
     public void setView() {
-
         setSupportActionBar(mBinding.toolbar);
-        mBinding.setSelectedDate(Calendar.getInstance().getTime());
+        long time = getIntent().getLongExtra("selectedDate", Calendar.getInstance().getTimeInMillis());
+        mBinding.setSelectedDate(Converter.longToDate(time));
         mBinding.setFragmentManger(getSupportFragmentManager());
         mBinding.setCalendarTabPagerAdapter(new CalendarTabPagerAdapter(mBinding.getFragmentManger()));
         mBinding.viewPager.setAdapter(mBinding.getCalendarTabPagerAdapter());
@@ -44,10 +46,13 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
         mBinding.getPresenter().setTabPagerAdapterView(mBinding.getCalendarTabPagerAdapter());
         mBinding.getPresenter().setTabPagerAdapterModel(mBinding.getCalendarTabPagerAdapter());
         mBinding.getPresenter().setFragments(mBinding.getSelectedDate());
+        mBinding.viewPager.setCurrentItem(getIntent().getIntExtra("selectedTab",0));
     }
 
     @Override
     public void navigateToRegisterActivity() {
-        startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        intent.putExtra("selectedDate", mBinding.getSelectedDate().getTime());
+        startActivity(intent);
     }
 }
