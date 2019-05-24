@@ -9,6 +9,15 @@ public class Schedule extends RealmObject {
     private String title;
     private String body;
 
+    public Schedule() {
+    }
+
+    public Schedule(Date date, String title, String body) {
+        this.date = date;
+        this.title = title;
+        this.body = body;
+    }
+
     public Date getDate() {
         return date;
     }
