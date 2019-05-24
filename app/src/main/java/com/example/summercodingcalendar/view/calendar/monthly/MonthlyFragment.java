@@ -1,6 +1,8 @@
 package com.example.summercodingcalendar.view.calendar.monthly;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.net.Uri;
@@ -13,10 +15,11 @@ import android.view.ViewGroup;
 import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.FragmentMonthlyBinding;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import org.threeten.bp.Instant;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -27,7 +30,7 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MonthlyFragment.OnFragmentInteractionListener} interface
+ * {@link OnCalendarViewDateSelectedListener} interface
  * to handle interaction events.
  * Use the {@link MonthlyFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -35,7 +38,7 @@ import java.util.Locale;
 public class MonthlyFragment extends Fragment implements MonthlyContract.View{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
-    private OnFragmentInteractionListener mListener;
+    private OnCalendarViewDateSelectedListener mListener;
     private MonthlyPresenter mPresenter;
     private FragmentMonthlyBinding mBinding;
     private String title;
@@ -76,25 +79,17 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_monthly, container, false);
         setView();
-
         return mBinding.getRoot();
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnCalendarViewDateSelectedListener) {
+            mListener = (OnCalendarViewDateSelectedListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnCalendarViewDateSelectedListener");
         }
     }
 
@@ -106,6 +101,8 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
 
     @Override
     public void setView() {
+        mBinding.setPresenter(new MonthlyPresenter(this));
+
         mBinding.materialCalendarView.setTitleFormatter(new TitleFormatter() {
             @Override
             public CharSequence format(CalendarDay calendarDay) {
@@ -113,11 +110,18 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
                 return calendarDay.getDate().format(dateFormat);
             }
         });
-
         mBinding.materialCalendarView.setDateSelected(CalendarDay.from(Instant.ofEpochMilli(selectedDate).atZone(ZoneId.systemDefault()).toLocalDate()), true);
         ArrayList<CalendarDay> days = new ArrayList<>();
         days.add(mBinding.materialCalendarView.getCurrentDate());
         mBinding.materialCalendarView.addDecorator(new EventDecorator(Color.RED, days));
+        mBinding.materialCalendarView.setOnDateChangedListener(mBinding.getPresenter());
+    }
+
+    @Override
+    public void changeDay(Date date) {
+        if (mListener != null) {
+            mListener.onDateSelected(date);
+        }
     }
 
     /**
@@ -130,8 +134,8 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnCalendarViewDateSelectedListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onDateSelected(Date date);
     }
 }
