@@ -10,8 +10,11 @@ import java.util.List;
 
 public class DailyPresenter implements DailyContract.Presenter {
     private DailyContract.View view;
+    private RealmHelper mRealmHelper = RealmHelper.getInstance();
     private ScheduleAdapterContract.View adapterView;
     private ScheduleAdapterContract.Model adapterModel;
+    private Schedule removedSchedule;
+    private int removedSchedulePosition;
     public DailyPresenter(DailyContract.View view) {
         this.view = view;
     }
@@ -28,8 +31,24 @@ public class DailyPresenter implements DailyContract.Presenter {
 
     @Override
     public void loadDailySchedule(Date date) {
-        List<Schedule> scheduleList = RealmHelper.getInstance().getSchedulesAt(date);
+        List<Schedule> scheduleList = mRealmHelper.getSchedulesAt(date);
         adapterModel.addItems(scheduleList);
         adapterView.notifyAdapter();
+    }
+
+    @Override
+    public void removeItem(int position) {
+        removedSchedule = adapterModel.removeItem(position);
+        removedSchedulePosition = position;
+        adapterView.notifyRemoveItem(position);
+        mRealmHelper.removeSchedule(removedSchedule);
+        view.showUndoSnackbar();
+    }
+
+    @Override
+    public void undoRemoveItem() {
+        adapterModel.addItem(removedSchedule, removedSchedulePosition);
+        adapterView.notifyAddItem(removedSchedulePosition);
+        mRealmHelper.undoSchedule(removedSchedule);
     }
 }

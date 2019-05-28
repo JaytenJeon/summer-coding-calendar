@@ -1,11 +1,14 @@
 package com.example.summercodingcalendar.view.calendar.daily;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.FragmentDailyBinding;
 import com.example.summercodingcalendar.util.Converter;
 import com.example.summercodingcalendar.view.calendar.adapter.DailyScheduleListAdapter;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Date;
 
@@ -24,7 +28,7 @@ import java.util.Date;
  * Use the {@link DailyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DailyFragment extends Fragment implements DailyContract.View {
+public class DailyFragment extends Fragment implements DailyContract.View{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private DailyPresenter mPresenter;
     private FragmentDailyBinding mBinding;
@@ -72,6 +76,18 @@ public class DailyFragment extends Fragment implements DailyContract.View {
         mPresenter.setDailyScheduleAdapterModel(mBinding.getAdapter());
         mPresenter.setDailyScheduleAdapterView(mBinding.getAdapter());
         mPresenter.loadDailySchedule(Converter.longToDate(selectedDate));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                mPresenter.removeItem(viewHolder.getAdapterPosition());
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(mBinding.recyclerView);
         return mBinding.getRoot();
     }
 
@@ -90,6 +106,18 @@ public class DailyFragment extends Fragment implements DailyContract.View {
     @Override
     public void onDateChanged(Date date) {
         selectedDate = date.getTime();
+    }
+
+    @Override
+    public void showUndoSnackbar() {
+        Snackbar.make(mBinding.getRoot(), "아이템 제거", Snackbar.LENGTH_LONG )
+                .setAction("취소", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPresenter.undoRemoveItem();
+                    }
+                })
+                .show();
     }
 
     /**

@@ -8,6 +8,7 @@ public class Schedule extends RealmObject {
     private Date date;
     private String title;
     private String body;
+    private boolean isDeleted;
 
     public Schedule() {
     }
@@ -15,7 +16,8 @@ public class Schedule extends RealmObject {
     public Schedule(Date date, String title, String body) {
         this.date = date;
         this.title = title;
-        this.body = body;
+        this.body =  body != null ? body.trim() : "";
+        this.isDeleted = false;
     }
 
     public Date getDate() {
@@ -40,5 +42,13 @@ public class Schedule extends RealmObject {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }
