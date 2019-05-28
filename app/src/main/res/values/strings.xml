@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SummerCodingCalendar</string>
+    <string name="app_name">Calendar</string>
 
 
     <string name="title_daily">일간</string>
@@ -10,5 +10,6 @@
     <string name="hint_title">제목</string>
     <string name="button_register">등록</string>
     <string name="error_date">날짜를 입력해주세요</string>
+    <string name="error_date_wrong">지난 날짜는 선택할 수 없습니다.</string>
     <string name="error_title">제목을 입력해주세요</string>
 </resources>

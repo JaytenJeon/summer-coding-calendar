@@ -1,5 +1,7 @@
 package com.example.summercodingcalendar.view.calendar.adapter;
 
+import java.util.Date;
+
 import androidx.fragment.app.Fragment;
 
 public interface TabPagerAdapterContract {
@@ -9,7 +11,7 @@ public interface TabPagerAdapterContract {
 
     interface Model{
         void addFragment(Fragment fragment);
-        int getCount();
+        void changeDate(Date date);
     }
 
 }
