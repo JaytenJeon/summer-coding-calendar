@@ -10,6 +10,7 @@ import com.example.summercodingcalendar.view.calendar.monthly.MonthlyFragment;
 import com.example.summercodingcalendar.view.calendar.weekly.WeeklyFragment;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CalendarTabPagerAdapter extends FragmentPagerAdapter
@@ -37,16 +38,16 @@ public class CalendarTabPagerAdapter extends FragmentPagerAdapter
         mFragments.add(fragment);
     }
 
+    @Override
+    public void changeDate(Date date) {
+        mFragments.set(2, DailyFragment.newInstance("Daily", date));
+    }
+
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
         return mFragments.get(position).getArguments().getString("title", "No name");
     }
-
-    public int getTabCount() {
-        return mFragments.size();
-    }
-
 
     @Override
     public void notifyAdapter() {

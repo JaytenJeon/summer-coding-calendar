@@ -19,7 +19,7 @@ import com.example.summercodingcalendar.view.register.RegisterActivity;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CalendarActivity extends AppCompatActivity implements CalendarContract.View, MonthlyFragment.OnCalendarViewDateSelectedListener, WeeklyFragment.OnFragmentInteractionListener, DailyFragment.OnFragmentInteractionListener {
+public class CalendarActivity extends AppCompatActivity implements CalendarContract.View, MonthlyFragment.OnCalendarViewDateSelectedListener, WeeklyFragment.OnFragmentInteractionListener {
     private ActivityCalendarBinding mBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +52,15 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onDateSelected(Date date) {
+        mBinding.setSelectedDate(date);
+        DailyFragment dailyFragment = (DailyFragment) mBinding.getCalendarTabPagerAdapter().getItem(2);
+        dailyFragment.onDateChanged(date);
+        mBinding.viewPager.setCurrentItem(2);
     }
 
     @Override
-    public void onDateSelected(Date date) {
-        mBinding.setSelectedDate(date);
-        mBinding.viewPager.setCurrentItem(2);
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

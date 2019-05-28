@@ -30,7 +30,7 @@ public class CalendarPresenter implements CalendarContract.Presenter {
     public void setFragments(Date date) {
         adapterModel.addFragment(MonthlyFragment.newInstance("Monthly", date));
         adapterModel.addFragment(WeeklyFragment.newInstance("Weekly"));
-        adapterModel.addFragment(DailyFragment.newInstance("Daily"));
+        adapterModel.addFragment(DailyFragment.newInstance("Daily", date));
         adapterView.notifyAdapter();
     }
 
