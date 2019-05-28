@@ -15,7 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailyScheduleListAdapter.DailyScheduleViewHolder> implements ScheduleAdapterContract.Model, ScheduleAdapterContract.View {
+public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailyScheduleListAdapter.DailyScheduleViewHolder>
+        implements ScheduleAdapterContract.Model, ScheduleAdapterContract.View {
     private List<Schedule> mScheduleList = new ArrayList<>();
 
     @NonNull
@@ -41,8 +42,28 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
     }
 
     @Override
+    public void notifyRemoveItem(int position) {
+        notifyItemRemoved(position);
+    }
+
+    @Override
+    public void notifyAddItem(int position) {
+        notifyItemInserted(position);
+    }
+
+    @Override
     public void addItems(List<Schedule> schedules) {
         mScheduleList.addAll(schedules);
+    }
+
+    @Override
+    public Schedule removeItem(int position) {
+        return mScheduleList.remove(position);
+    }
+
+    @Override
+    public void addItem(Schedule schedule, int position) {
+        mScheduleList.add(position, schedule);
     }
 
 
@@ -54,6 +75,13 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
         }
         void onBind(Schedule schedule){
             mBinding.setSchedule(schedule);
+            mBinding.setIsExpanded(false);
+            mBinding.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBinding.setIsExpanded(!mBinding.getIsExpanded());
+                }
+            });
         }
     }
 }
