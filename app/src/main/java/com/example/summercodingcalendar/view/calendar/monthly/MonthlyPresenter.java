@@ -1,12 +1,9 @@
 package com.example.summercodingcalendar.view.calendar.monthly;
 
+import com.example.summercodingcalendar.util.Converter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +16,6 @@ public class MonthlyPresenter implements MonthlyContract.Presenter, OnDateSelect
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView, @NonNull CalendarDay calendarDay, boolean b) {
-        view.changeDay(java.sql.Date.valueOf(String.valueOf(calendarDay.getDate())));
+        view.changeDay(Converter.localDateToDate(calendarDay.getDate()));
     }
 }

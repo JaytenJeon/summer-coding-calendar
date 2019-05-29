@@ -1,5 +1,8 @@
 package com.example.summercodingcalendar.util;
 
+import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.ZoneId;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +38,14 @@ public class Converter {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(oloValue);
         Date newValue = calendar.getTime();
-
         return newValue;
+    }
+
+    public static LocalDate dateToLocalDate(Date oldValue){
+        return Instant.ofEpochMilli(oldValue.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static Date localDateToDate(LocalDate oldValue){
+        return java.sql.Date.valueOf(String.valueOf(oldValue));
     }
 }

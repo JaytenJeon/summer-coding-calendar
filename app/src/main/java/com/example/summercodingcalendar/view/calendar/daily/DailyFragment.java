@@ -9,12 +9,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.FragmentDailyBinding;
+import com.example.summercodingcalendar.util.CalendarHelper;
 import com.example.summercodingcalendar.util.Converter;
 import com.example.summercodingcalendar.view.calendar.adapter.DailyScheduleListAdapter;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,11 +32,9 @@ import java.util.Date;
  */
 public class DailyFragment extends Fragment implements DailyContract.View{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private DailyPresenter mPresenter;
     private FragmentDailyBinding mBinding;
     private String title;
-    private long selectedDate;
-
+    private CalendarHelper mCalendarHelper = CalendarHelper.getInstance();
     public DailyFragment() {
         // Required empty public constructor
     }
@@ -45,12 +45,10 @@ public class DailyFragment extends Fragment implements DailyContract.View{
      *
      * @return A new instance of fragment DailyFragment.
      */
-    public static DailyFragment newInstance(String title, Date date) {
+    public static DailyFragment newInstance(String title) {
         DailyFragment fragment = new DailyFragment();
         Bundle args = new Bundle();
-        long time = date.getTime();
         args.putString("title", title);
-        args.putLong("selectedDate", time);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,10 +58,7 @@ public class DailyFragment extends Fragment implements DailyContract.View{
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.title = getArguments().getString("title");
-            this.selectedDate = getArguments().getLong("selectedDate");
-
         }
-        mPresenter = new DailyPresenter(this);
     }
 
     @Override
@@ -71,23 +66,7 @@ public class DailyFragment extends Fragment implements DailyContract.View{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_daily, container, false);
-        mBinding.setAdapter(new DailyScheduleListAdapter());
-        mBinding.recyclerView.setAdapter(mBinding.getAdapter());
-        mPresenter.setDailyScheduleAdapterModel(mBinding.getAdapter());
-        mPresenter.setDailyScheduleAdapterView(mBinding.getAdapter());
-        mPresenter.loadDailySchedule(Converter.longToDate(selectedDate));
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                mPresenter.removeItem(viewHolder.getAdapterPosition());
-            }
-        });
-        itemTouchHelper.attachToRecyclerView(mBinding.recyclerView);
+        setView();
         return mBinding.getRoot();
     }
 
@@ -104,8 +83,31 @@ public class DailyFragment extends Fragment implements DailyContract.View{
     }
 
     @Override
+    public void setView() {
+        mBinding.setDate(mCalendarHelper.getCurrentDate());
+        mBinding.setAdapter(new DailyScheduleListAdapter());
+        mBinding.recyclerView.setAdapter(mBinding.getAdapter());
+        mBinding.setPresenter(new DailyPresenter(this));
+        mBinding.getPresenter().setDailyScheduleAdapterModel(mBinding.getAdapter());
+        mBinding.getPresenter().setDailyScheduleAdapterView(mBinding.getAdapter());
+        mBinding.getPresenter().loadDailySchedule(mBinding.getDate());
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                mBinding.getPresenter().removeItem(viewHolder.getAdapterPosition());
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(mBinding.recyclerView);
+    }
+
+    @Override
     public void onDateChanged(Date date) {
-        selectedDate = date.getTime();
+        mCalendarHelper.setDate(date);
     }
 
     @Override
@@ -114,7 +116,7 @@ public class DailyFragment extends Fragment implements DailyContract.View{
                 .setAction("취소", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mPresenter.undoRemoveItem();
+                        mBinding.getPresenter().undoRemoveItem();
                     }
                 })
                 .show();

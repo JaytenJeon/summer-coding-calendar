@@ -1,16 +1,19 @@
 package com.example.summercodingcalendar.view.calendar.daily;
 
 import com.example.summercodingcalendar.data.Schedule;
+import com.example.summercodingcalendar.util.CalendarHelper;
 import com.example.summercodingcalendar.util.RealmHelper;
 import com.example.summercodingcalendar.view.calendar.adapter.DailyScheduleListAdapter;
 import com.example.summercodingcalendar.view.calendar.adapter.ScheduleAdapterContract;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class DailyPresenter implements DailyContract.Presenter {
     private DailyContract.View view;
     private RealmHelper mRealmHelper = RealmHelper.getInstance();
+    private CalendarHelper mCalendarHelper = CalendarHelper.getInstance();
     private ScheduleAdapterContract.View adapterView;
     private ScheduleAdapterContract.Model adapterModel;
     private Schedule removedSchedule;
@@ -50,5 +53,17 @@ public class DailyPresenter implements DailyContract.Presenter {
         adapterModel.addItem(removedSchedule, removedSchedulePosition);
         adapterView.notifyAddItem(removedSchedulePosition);
         mRealmHelper.undoSchedule(removedSchedule);
+    }
+
+    @Override
+    public void onNextButtonClicked(Date date) {
+        view.onDateChanged(mCalendarHelper.getNextDate());
+        view.setView();
+    }
+
+    @Override
+    public void onPreviousButtonClicked(Date date) {
+        view.onDateChanged(mCalendarHelper.getPreviousDate());
+        view.setView();
     }
 }

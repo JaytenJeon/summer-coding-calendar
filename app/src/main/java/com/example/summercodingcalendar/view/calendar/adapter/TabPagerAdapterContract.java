@@ -11,7 +11,6 @@ public interface TabPagerAdapterContract {
 
     interface Model{
         void addFragment(Fragment fragment);
-        void changeDate(Date date);
     }
 
 }

@@ -38,11 +38,6 @@ public class CalendarTabPagerAdapter extends FragmentPagerAdapter
         mFragments.add(fragment);
     }
 
-    @Override
-    public void changeDate(Date date) {
-        mFragments.set(2, DailyFragment.newInstance("Daily", date));
-    }
-
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {

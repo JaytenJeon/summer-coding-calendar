@@ -7,6 +7,7 @@ import java.util.Date;
 
 public interface DailyContract {
     interface View{
+        void setView();
         void onDateChanged(Date date);
         void showUndoSnackbar();
     }
@@ -17,6 +18,9 @@ public interface DailyContract {
         void loadDailySchedule(Date date);
         void removeItem(int position);
         void undoRemoveItem();
+        void onNextButtonClicked(Date date);
+        void onPreviousButtonClicked(Date date);
+
     }
 
 }

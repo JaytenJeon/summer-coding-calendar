@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.ActivityRegisterBinding;
+import com.example.summercodingcalendar.util.CalendarHelper;
 import com.example.summercodingcalendar.util.Converter;
 import com.example.summercodingcalendar.view.calendar.CalendarActivity;
 
@@ -24,13 +25,14 @@ import java.util.Calendar;
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View{
     private ActivityRegisterBinding mBinding;
     private Calendar mCalendar = Calendar.getInstance();
+    private CalendarHelper mCalendarHelper = CalendarHelper.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_register);
         mBinding.setPresenter(new RegisterPresenter(this));
-        long time = getIntent().getLongExtra("selectedDate", Calendar.getInstance().getTimeInMillis());
-        mBinding.setDate(Converter.longToDate(time));
+        mBinding.setDate(mCalendarHelper.getCurrentDate());
     }
 
     @Override
@@ -51,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     @Override
     public boolean validateDate() {
         if(mBinding.getDate() == null || mBinding.getDate().before(Date.valueOf(LocalDate.now()+""))){
-            mBinding.textInputLayoutDate.setError(getString(R.string.error_date));
+            mBinding.textInputLayoutDate.setError(getString(R.string.error_date_wrong));
             return  false;
         }
         mBinding.textInputLayoutDate.setErrorEnabled(false);
@@ -92,9 +94,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
     @Override
     public void navigateToDaily(java.util.Date date) {
+        mCalendarHelper.setDate(date);
         Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
         intent.putExtra("selectedTab",2);
-        intent.putExtra("selectedDate", date.getTime());
         startActivity(intent);
         finish();
     }
