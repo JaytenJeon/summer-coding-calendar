@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.ActivityCalendarBinding;
+import com.example.summercodingcalendar.util.CalendarHelper;
 import com.example.summercodingcalendar.util.Converter;
 import com.example.summercodingcalendar.view.calendar.adapter.CalendarTabPagerAdapter;
 import com.example.summercodingcalendar.view.calendar.daily.DailyFragment;
@@ -21,6 +22,7 @@ import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity implements CalendarContract.View, MonthlyFragment.OnCalendarViewDateSelectedListener, WeeklyFragment.OnFragmentInteractionListener {
     private ActivityCalendarBinding mBinding;
+    private CalendarHelper mCalendarHelper = CalendarHelper.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +33,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
     @Override
     public void setView() {
         setSupportActionBar(mBinding.toolbar);
-        long time = getIntent().getLongExtra("selectedDate", Calendar.getInstance().getTimeInMillis());
-        mBinding.setSelectedDate(Converter.longToDate(time));
+        mBinding.setSelectedDate(mCalendarHelper.getCurrentDate());
         mBinding.setFragmentManger(getSupportFragmentManager());
         mBinding.setCalendarTabPagerAdapter(new CalendarTabPagerAdapter(mBinding.getFragmentManger()));
         mBinding.viewPager.setAdapter(mBinding.getCalendarTabPagerAdapter());
@@ -47,7 +48,6 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
     @Override
     public void navigateToRegisterActivity() {
         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-        intent.putExtra("selectedDate", mBinding.getSelectedDate().getTime());
         startActivity(intent);
     }
 

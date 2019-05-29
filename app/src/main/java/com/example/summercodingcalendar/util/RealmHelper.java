@@ -39,7 +39,6 @@ public class RealmHelper {
                 .equalTo("date", date)
                 .equalTo("isDeleted", false)
                 .findAll();
-        Log.d("AD", schedules.size()+"/"+date.toString());
         return schedules;
     }
 
