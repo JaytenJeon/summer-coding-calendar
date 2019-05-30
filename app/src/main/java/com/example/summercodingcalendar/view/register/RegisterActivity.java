@@ -24,8 +24,8 @@ import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View{
     private ActivityRegisterBinding mBinding;
-    private Calendar mCalendar = Calendar.getInstance();
     private CalendarHelper mCalendarHelper = CalendarHelper.getInstance();
+    private Calendar mCalendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_register);
         mBinding.setPresenter(new RegisterPresenter(this));
         mBinding.setDate(mCalendarHelper.getCurrentDate());
+        mCalendar.setTime(mBinding.getDate());
     }
 
     @Override

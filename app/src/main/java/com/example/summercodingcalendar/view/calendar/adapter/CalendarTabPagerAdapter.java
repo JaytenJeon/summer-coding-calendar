@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.summercodingcalendar.view.calendar.daily.DailyFragment;
 import com.example.summercodingcalendar.view.calendar.monthly.MonthlyFragment;
@@ -14,9 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 public class CalendarTabPagerAdapter extends FragmentPagerAdapter
-        implements TabPagerAdapterContract.View, TabPagerAdapterContract.Model{
+        implements TabPagerAdapterContract.View, TabPagerAdapterContract.Model, ViewPager.OnPageChangeListener {
     private List<Fragment> mFragments = new ArrayList<>();
-
     public CalendarTabPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -47,5 +47,20 @@ public class CalendarTabPagerAdapter extends FragmentPagerAdapter
     @Override
     public void notifyAdapter() {
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        getItem(position).onResume();
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

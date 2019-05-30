@@ -56,6 +56,8 @@ public class DailyFragment extends Fragment implements DailyContract.View{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("DAILY", "onCreate");
+
         if (getArguments() != null) {
             this.title = getArguments().getString("title");
         }
@@ -65,25 +67,42 @@ public class DailyFragment extends Fragment implements DailyContract.View{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("DAILY", "onCreateView");
+
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_daily, container, false);
         setView();
         return mBinding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("DAILY", "onResume");
+
+        setView();
+    }
+
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d("DAILY", "onAttach");
+
 
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.d("DAILY", "onDetach");
+
     }
 
     @Override
     public void setView() {
+        Log.d("DAILY", " - currentDate:" + mCalendarHelper.getCurrentDate());
+
         mBinding.setDate(mCalendarHelper.getCurrentDate());
         mBinding.setAdapter(new DailyScheduleListAdapter());
         mBinding.recyclerView.setAdapter(mBinding.getAdapter());
