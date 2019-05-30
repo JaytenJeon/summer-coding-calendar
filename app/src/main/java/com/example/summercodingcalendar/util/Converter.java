@@ -23,9 +23,30 @@ public class Converter {
         }
         return null;
     }
-
     public static Date stringToDate(String oldValue) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일");
+        try {
+            return format.parse(oldValue);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @InverseMethod("weekNumberTitleToDate")
+    public static String dateToWeekNumberTitle(Date oldValue){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 W주차");
+        try {
+            return format.format(oldValue);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Date weekNumberTitleToDate(String oldValue){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 W주차");
         try {
             return format.parse(oldValue);
         } catch (ParseException e) {

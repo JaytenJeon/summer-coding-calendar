@@ -29,6 +29,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -92,13 +93,7 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
     public void onResume() {
         super.onResume();
         Log.d("MONTHLY", "onResume");
-        if(!mBinding.materialCalendarView.getSelectedDate().equals(mCalendarHelper.getCurrentCalendarDay())){
-            Log.d("MONTHLY", " - selectedDate(before): " + mBinding.materialCalendarView.getSelectedDate());
-            mBinding.materialCalendarView.clearSelection();
-            mBinding.materialCalendarView.setSelectedDate(mCalendarHelper.getCurrentCalendarDay());
-            Log.d("MONTHLY", " - selectedDate(after): " + mBinding.materialCalendarView.getSelectedDate());
-
-        }
+        setView();
     }
 
 
@@ -126,22 +121,7 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
     @Override
     public void setView() {
         mBinding.setPresenter(new MonthlyPresenter(this));
-        mBinding.materialCalendarView.setTitleFormatter(new TitleFormatter() {
-            @Override
-            public CharSequence format(CalendarDay calendarDay) {
-                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy년  LLL", new Locale("ko"));
-                return calendarDay.getDate().format(dateFormat);
-            }
-        });
-        mBinding.materialCalendarView.setSelectedDate(mCalendarHelper.getCurrentCalendarDay());
-        mBinding.materialCalendarView.requestLayout();
-        Log.d("MONTHLY", " - selectedDate: " + mBinding.materialCalendarView.getSelectedDate() );
-
-
-//        ArrayList<CalendarDay> days = new ArrayList<>();
-//        days.add(mBinding.materialCalendarView.getCurrentDate());
-//        mBinding.materialCalendarView.addDecorator(new EventDecorator(Color.RED, days));
-        mBinding.materialCalendarView.setOnDateChangedListener(mBinding.getPresenter());
+        mBinding.getPresenter().onCreate();
     }
 
     @Override
@@ -149,6 +129,27 @@ public class MonthlyFragment extends Fragment implements MonthlyContract.View{
         if (mListener != null) {
             mListener.onDateSelected(date);
         }
+    }
+
+    @Override
+    public void setMaterialCalendar(List<CalendarDay> events) {
+        mBinding.materialCalendarView.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay calendarDay) {
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy년  LLL", new Locale("ko"));
+                return calendarDay.getDate().format(dateFormat);
+            }
+        });
+        mBinding.materialCalendarView.setCurrentDate(mCalendarHelper.getCurrentCalendarDay());
+        mBinding.materialCalendarView.setSelectedDate(mCalendarHelper.getCurrentCalendarDay());
+        mBinding.materialCalendarView.requestLayout();
+        Log.d("MONTHLY", " - selectedDate: " + mBinding.materialCalendarView.getSelectedDate() );
+        Log.d("MONTHLY", " - events Size:" + events.size());
+        mBinding.materialCalendarView.removeDecorators();
+        mBinding.materialCalendarView.addDecorator(new EventDecorator(Color.RED, events));
+        mBinding.materialCalendarView.setOnDateChangedListener(mBinding.getPresenter());
+
+
     }
 
     /**

@@ -3,12 +3,24 @@ package com.example.summercodingcalendar.view.calendar.weekly;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.summercodingcalendar.R;
+import com.example.summercodingcalendar.databinding.FragmentWeeklyBinding;
+import com.example.summercodingcalendar.util.CalendarHelper;
+import com.example.summercodingcalendar.view.calendar.adapter.DailyScheduleListAdapter;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,8 +32,9 @@ import com.example.summercodingcalendar.R;
  */
 public class WeeklyFragment extends Fragment implements WeeklyContract.View{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private WeeklyPresenter mPresenter;
+    private CalendarHelper mCalendarHelper = CalendarHelper.getInstance();
     private OnFragmentInteractionListener mListener;
+    private FragmentWeeklyBinding mBinding;
     private String title;
 
     public WeeklyFragment() {
@@ -49,14 +62,21 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.View{
         if (getArguments() != null) {
             this.title = getArguments().getString("title");
         }
-        mPresenter = new WeeklyPresenter(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_weekly, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly, container, false);
+        setView();
+        return mBinding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setView();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -81,6 +101,47 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.View{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDateChanged(Date date) {
+
+        mCalendarHelper.setDate(date);
+    }
+
+    @Override
+    public void setView() {
+        mBinding.setDate(mCalendarHelper.getCurrentDate());
+        mBinding.setPresenter(new WeeklyPresenter(this));
+        mBinding.setAdapter(new DailyScheduleListAdapter());
+        mBinding.recyclerView.setAdapter(mBinding.getAdapter());
+        mBinding.getPresenter().setWeeklyScheduleAdapterModel(mBinding.getAdapter());
+        mBinding.getPresenter().setWeeklyScheduleAdapterView(mBinding.getAdapter());
+        mBinding.getPresenter().loadWeeklySchedule();
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                mBinding.getPresenter().removeItem(viewHolder.getAdapterPosition());
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(mBinding.recyclerView);
+    }
+
+    @Override
+    public void showUndoSnackbar() {
+        Snackbar.make(mBinding.getRoot(), "아이템 제거", Snackbar.LENGTH_LONG )
+                .setAction("취소", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mBinding.getPresenter().undoRemoveItem();
+                    }
+                })
+                .show();
     }
 
     /**

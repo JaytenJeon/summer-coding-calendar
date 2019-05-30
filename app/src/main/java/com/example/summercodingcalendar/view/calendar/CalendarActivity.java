@@ -6,6 +6,8 @@ import android.net.Uri;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.summercodingcalendar.R;
 import com.example.summercodingcalendar.databinding.ActivityCalendarBinding;
@@ -43,6 +45,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarContr
         mBinding.getPresenter().setTabPagerAdapterModel(mBinding.getCalendarTabPagerAdapter());
         mBinding.getPresenter().setFragments(mBinding.getSelectedDate());
         mBinding.viewPager.setCurrentItem(getIntent().getIntExtra("selectedTab",0));
+        mBinding.viewPager.addOnPageChangeListener(mBinding.getCalendarTabPagerAdapter());
     }
 
     @Override
